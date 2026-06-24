@@ -1,0 +1,34 @@
+<script>
+// ── Font accessibility toggle ──────────────────────────────────
+function toggleFont() {
+  const body = document.body;
+  const btn  = document.getElementById('font-toggle');
+  const active = body.classList.toggle('accessible-font');
+  btn.setAttribute('aria-pressed', active.toString());
+  btn.textContent = active ? 'Aa  standard' : 'Aa\u2009 leggibilità';
+  localStorage.setItem('lv-font', active ? '1' : '');
+}
+(function() {
+  if (localStorage.getItem('lv-font')) {
+    document.body.classList.add('accessible-font');
+    const btn = document.getElementById('font-toggle');
+    if (btn) { btn.setAttribute('aria-pressed','true'); btn.textContent = 'Aa  standard'; }
+  }
+})();
+
+// ── Sidebar active section tracking ───────────────────────────
+(function() {
+  const sections = document.querySelectorAll('.chapter-section');
+  const links    = document.querySelectorAll('.sidebar-nav a');
+  if (!sections.length) return;
+  window.addEventListener('scroll', function() {
+    let cur = '';
+    sections.forEach(function(s) {
+      if (window.scrollY >= s.offsetTop - 90) cur = s.id;
+    });
+    links.forEach(function(a) {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + cur);
+    });
+  });
+})();
+</script>

@@ -1,0 +1,69 @@
+// ═══════════════════════════════════════════════════════════
+//  STILE.scss  —  Tutte le variabili di design del sito
+//  Modifica solo questo file per cambiare colori, font, spazi.
+//  Dopo ogni modifica: git add . && git commit -m "stile" && git push
+// ═══════════════════════════════════════════════════════════
+
+// ── Font ────────────────────────────────────────────────────
+$font-body:       'Source Serif 4', Georgia, serif;
+$font-display:    'IM Fell English', Georgia, serif;
+$font-accessible: 'Atkinson Hyperlegible', Arial, sans-serif;
+$font-mono:       'JetBrains Mono', 'Fira Mono', monospace;
+
+$font-size-base:  18px;
+$line-height:     1.8;
+
+// ── Palette principale ───────────────────────────────────────
+//  Cambia questi hex per ridisegnare l'intero sito in un colpo solo.
+
+$cyan:            #0891b2;   // colore principale — link attivi, accenti
+$cyan-light:      #e0f7fa;   // sfondi cyan chiari
+$cyan-mid:        #22d3ee;
+
+$teal:            #0f766e;   // colore secondario — fisica, sidebar
+$teal-light:      #ccfbf1;
+
+$magenta:         #c026d3;   // link, CTA
+$magenta-light:   #fae8ff;
+
+// ── Colori per materia ───────────────────────────────────────
+//  Ogni materia ha un colore di accento e uno sfondo pastello.
+$math-accent:     $cyan;
+$math-bg:         #e0f2fe;
+$math-border:     #7dd3fc;
+
+$phys-accent:     $teal;
+$phys-bg:         #f0fdf4;
+$phys-border:     #86efac;
+
+$citt-accent:     #7c3aed;
+$citt-bg:         #faf5ff;
+$citt-border:     #d8b4fe;
+
+// ── Colori testo ────────────────────────────────────────────
+$text-primary:    #1a202c;
+$text-secondary:  #4a5568;
+$text-muted:      #718096;
+
+// ── Sfondi ──────────────────────────────────────────────────
+$bg-main:         #fafaf8;   // sfondo pagina
+$bg-surface:      #ffffff;   // sfondo card, sidebar
+$border:          #e2e8f0;
+$border-strong:   #cbd5e0;
+
+// ── Box di contenuto (definizioni, teoremi, ecc.) ───────────
+$box-def-bg:      #e0f7fa;   $box-def-border:   #0891b2;  // Definizione — cyan
+$box-thm-bg:      #f0fdf4;   $box-thm-border:   #0f766e;  // Teorema — teal
+$box-warn-bg:     #fefce8;   $box-warn-border:  #ca8a04;  // Attenzione — giallo
+$box-ex-bg:       #faf5ff;   $box-ex-border:    #7c3aed;  // Esempio — viola
+$box-proof-bg:    #f8fafc;   $box-proof-border: #718096;  // Dimostrazione — grigio
+$box-note-bg:     #fff7ed;   $box-note-border:  #ea580c;  // Nota — arancio
+
+// ── Spaziatura ───────────────────────────────────────────────
+$radius-sm:       6px;
+$radius-md:       10px;
+$radius-lg:       16px;
+
+$sidebar-width:   260px;
+$content-max:     760px;
+$topbar-height:   56px;

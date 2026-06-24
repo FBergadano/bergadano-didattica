@@ -1,0 +1,14 @@
+<nav class="topbar" role="navigation" aria-label="Navigazione principale">
+  <a href="{{ '/' | relative_url }}" class="topbar-brand">{{ site.title }}</a>
+  <div class="topbar-right">
+    {% if page.layout == "corso" %}
+    <span class="breadcrumb">
+      <a href="{{ '/' | relative_url }}">Home</a> › <span>{{ page.title }}</span>
+    </span>
+    {% endif %}
+    <button id="font-toggle" onclick="toggleFont()" aria-pressed="false"
+            title="Attiva font ad alta leggibilità (Atkinson Hyperlegible)">
+      Aa&thinsp; leggibilità
+    </button>
+  </div>
+</nav>
