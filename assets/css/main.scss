@@ -70,6 +70,29 @@ a:hover { color: $cyan; text-decoration: underline; }
 }
 body.accessible-font #font-toggle { background: $cyan; color: #fff; }
 
+#pdf-btn {
+  padding: 5px 12px; border-radius: 20px;
+  border: 1.5px solid $text-muted;
+  background: transparent; color: $text-secondary;
+  font-size: 0.8rem; cursor: pointer; font-family: inherit;
+  transition: background 0.2s, color 0.2s;
+  &:hover { background: $text-muted; color: #fff; }
+}
+
+// ── QR code placeholder (shown only in print via @media print) ─
+.video-qr-print {
+  display: none;
+  text-align: center;
+  border: 1px solid $border;
+  border-radius: $radius-md;
+  padding: 1.25rem; margin: 1.5rem 0;
+  img { display: block; margin: 0 auto 0.6rem; }
+  .video-qr-url {
+    font-size: 0.72rem; color: $text-muted;
+    word-break: break-all; margin-top: 0.25rem;
+  }
+}
+
 // ── Homepage hero ────────────────────────────────────────────
 .hero {
   max-width: 820px; margin: 0 auto;
@@ -101,6 +124,69 @@ body.accessible-font #font-toggle { background: $cyan; color: #fff; }
     padding: 0.75rem 1.25rem;
     border-radius: 0 $radius-sm $radius-sm 0;
     font-size: 1rem; color: $teal;
+  }
+}
+
+// ── Classroom grid (homepage) ────────────────────────────────
+.classi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.classe-card {
+  display: flex; flex-direction: column; position: relative;
+  background: $bg-surface;
+  border: 1.5px solid $border;
+  border-radius: $radius-lg;
+  padding: 1.25rem 1.5rem 2.5rem;
+  text-decoration: none; color: $text-primary;
+  transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+  overflow: hidden;
+
+  &::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(to right, $teal, $cyan);
+  }
+
+  &:hover {
+    border-color: $teal; transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(15,118,110,0.12);
+    text-decoration: none;
+    .card-arrow { opacity: 1; }
+  }
+
+  &-label {
+    font-family: $font-accessible; font-size: 0.7rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: $text-muted; margin-bottom: 0.2rem;
+  }
+
+  &-nome {
+    font-family: $font-display; font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  &-corsi {
+    list-style: none; margin: 0; padding: 0;
+    display: flex; flex-direction: column; gap: 0.2rem;
+
+    li {
+      font-size: 0.82rem; color: $text-secondary;
+      padding-left: 0.8rem; position: relative;
+      &::before { content: '·'; position: absolute; left: 0; color: $text-muted; }
+    }
+
+    .materia-fisica    { color: $teal; }
+    .materia-matematica { color: $cyan; }
+    .materia-cittadinanza { color: $citt-accent; }
+  }
+
+  .card-arrow {
+    position: absolute; bottom: 1rem; right: 1.25rem;
+    font-size: 1rem; color: $teal; opacity: 0;
+    transition: opacity 0.2s;
   }
 }
 
@@ -177,7 +263,7 @@ body.accessible-font #font-toggle { background: $cyan; color: #fff; }
 // ── Sidebar ───────────────────────────────────────────────────
 .sidebar {
   border-right: 1px solid $border;
-  padding: 2rem 1.25rem;
+  padding: 2rem 1rem 2rem 0;
   position: sticky; top: $topbar-height;
   height: calc(100vh - #{$topbar-height});
   overflow-y: auto; background: $bg-surface;
@@ -190,7 +276,7 @@ body.accessible-font #font-toggle { background: $cyan; color: #fff; }
   list-style: none;
   li { margin-bottom: 0.1rem; }
   a {
-    display: block; padding: 0.45rem 0.75rem;
+    display: block; padding: 0.45rem 0.6rem 0.45rem 0.35rem;
     border-radius: $radius-sm; font-size: 0.88rem;
     color: $text-secondary; text-decoration: none;
     transition: background 0.15s, color 0.15s;
@@ -431,10 +517,246 @@ footer {
   a { color: $magenta; }
 }
 
+// ── Sidebar course name as link ───────────────────────────────
+a.sidebar-course-name {
+  display: block;
+  font-family: $font-display; font-size: 1rem; margin-bottom: 0.2rem;
+  color: $text-primary; text-decoration: none;
+  &:hover { color: var(--accent, #{$teal}); text-decoration: none; }
+}
+
+// ── Chapter page title (small caps, like \textsc) ─────────────
+h1.chapter-title {
+  font-family: $font-display; font-size: 1.9rem;
+  font-variant: small-caps;
+  line-height: 1.2; flex: 1;
+  border-bottom: 2px solid var(--accent-light, #{$teal-light});
+  padding-bottom: 0.3rem;
+}
+
+// ── Section / subsection / paragraph headings ─────────────────
+//
+// Diamond geometry — square side s = 1.85rem, rotated 45°:
+//   half-diagonal  = s·√2/2 = 1.308rem
+//   ::before left  = s·(√2-1)/2 ≈ 0.38rem  (left corner of diamond at x=0)
+//   right corner   = s·√2      ≈ 2.62rem   (bar starts exactly here)
+//   text starts at             ≈ 3.1rem
+
+.chapter-prose {
+  counter-reset: section;
+  p  { margin-bottom: 1rem; }
+  ul, ol { margin: 0.75rem 0 1rem 1.5rem; }
+  li { margin-bottom: 0.3rem; }
+}
+
+// h1 — Section  (LARGE · numbered diamond · bar from diagonal)
+//
+// Bar height = diamond diagonal (1.85·√2 = 2.62rem), centred vertically.
+// Color = midpoint between --accent-light and --accent-border for subtle visibility.
+.chapter-prose h1 {
+  counter-increment: section;
+  position: relative;
+  background:
+    linear-gradient(
+      to right,
+      transparent 1.305rem,
+      color-mix(in srgb, var(--accent-light) 55%, var(--accent-border) 45%) 1.305rem
+    )
+    0 50% / 100% 2.62rem no-repeat;
+  padding: 0.8rem 1.25rem 0.8rem 3.1rem;
+  margin: 2.5rem 0 1.1rem;
+  font-family: $font-display;
+  font-size: 1.35rem;   // LARGE
+  font-weight: normal;
+  font-variant: normal; // override chapter-title small-caps
+  color: $text-primary;
+
+  // Rotated square (diamond), left corner flush with the h1's left edge
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0.38rem;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    width: 1.85rem;
+    height: 1.85rem;
+    background: var(--accent);
+    border-radius: 3px;
+  }
+
+  // Counter number — upright, centred over the diamond
+  &::after {
+    content: counter(section);
+    position: absolute;
+    left: 0.38rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.85rem;
+    height: 1.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    font-family: $font-accessible;
+  }
+}
+
+// h2 — Subsection  (Large · colored · left rule · no number)
+.chapter-prose h2 {
+  font-family: $font-display;
+  font-size: 1.15rem;   // Large
+  font-weight: normal;
+  color: var(--accent);
+  margin: 1.75rem 0 0.6rem;
+  padding-left: 0.9rem;
+  border-left: 3px solid var(--accent-border);
+}
+
+// h3 — Paragraph  (large · colored italic · no decoration)
+.chapter-prose h3 {
+  font-family: $font-display;
+  font-size: 1rem;      // large
+  font-weight: normal;
+  font-style: italic;
+  color: var(--accent);
+  margin: 1.25rem 0 0.4rem;
+}
+
+// ── Chapter TOC (sharp corners) ───────────────────────────────
+.chapter-toc {
+  background: var(--accent-light);
+  border: 1px solid var(--accent-border);
+  border-radius: 0;
+  padding: 1rem 1.25rem 1rem 1.5rem;
+  margin-bottom: 2.5rem;
+
+  &:empty { display: none; }
+
+  &::before {
+    content: 'Indice del capitolo';
+    display: block;
+    font-family: $font-accessible;
+    font-size: 0.7rem; letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent); font-weight: 700;
+    margin-bottom: 0.6rem;
+  }
+
+  ul { list-style: none; margin: 0; padding: 0; }
+
+  li {
+    margin: 0.2rem 0;
+    &.toc-sub    { padding-left: 1.1rem; font-size: 0.9em; }
+    &.toc-subsub { padding-left: 2.2rem; font-size: 0.85em; font-style: italic; }
+  }
+
+  a {
+    color: var(--accent, #{$teal}); font-size: 0.92rem;
+    text-decoration: none;
+    &:hover { text-decoration: underline; color: var(--accent); }
+  }
+}
+
+// ── Chapter prev/next navigation ──────────────────────────────
+.chapter-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 3rem; padding-top: 1.5rem;
+  border-top: 1px solid $border;
+  gap: 1rem;
+
+  a {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.55rem 1rem;
+    border: 1.5px solid var(--accent-border);
+    border-radius: $radius-md;
+    color: var(--accent); font-size: 0.88rem;
+    font-family: $font-accessible; text-decoration: none;
+    transition: background 0.15s;
+    max-width: 45%;
+    &:hover { background: var(--accent-light); text-decoration: none; }
+  }
+
+  &-prev::before { content: '← '; }
+  &-next::after  { content: ' →'; }
+}
+
+// ── Chapter grid (course overview) ───────────────────────────
+.chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.chapter-card {
+  display: flex; flex-direction: column;
+  padding: 1rem 1.25rem;
+  background: $bg-surface;
+  border: 1.5px solid $border;
+  border-left: 4px solid var(--accent);
+  border-radius: $radius-md;
+  text-decoration: none; color: $text-primary;
+  transition: background 0.15s, border-color 0.15s;
+
+  &:hover {
+    background: var(--accent-light);
+    border-color: var(--accent-border);
+    text-decoration: none;
+  }
+
+  &-num {
+    font-family: $font-accessible;
+    font-size: 0.68rem; letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent); margin-bottom: 0.25rem;
+  }
+
+  &-title { font-family: $font-display; font-size: 1rem; }
+}
+
 // ── Responsive ────────────────────────────────────────────────
 @media (max-width: 768px) {
   .page-layout { grid-template-columns: 1fr; }
   .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid $border; }
   .main-content { padding: 1.5rem 1rem; }
   .topbar { padding: 0 1rem; }
+  .chapter-nav a { max-width: none; font-size: 0.82rem; }
+}
+
+// ── Print / PDF export ────────────────────────────────────────
+@media print {
+  // Hide navigation, interactive widgets, and topbar controls
+  .sidebar, .chapter-nav, .chapter-toc,
+  .fill-def, .homework-section,
+  #font-toggle, #pdf-btn, footer { display: none !important; }
+
+  // Keep topbar minimal: show brand + breadcrumb only
+  .topbar { position: static; border: none; box-shadow: none; padding: 0.5rem 1rem; }
+
+  // Full-width single-column layout
+  .page-layout { display: block; }
+  .main-content { padding: 0.5rem 1rem; max-width: none; }
+
+  // Videos hidden; QR replacements shown
+  .video-wrap { display: none !important; }
+  .video-qr-print { display: block !important; }
+
+  // Simplify section headings for print (grayscale, no fill)
+  .chapter-prose h1 {
+    background: none !important;
+    padding-left: 3.1rem !important;
+    &::before { background: #444 !important; }
+    &::after  { color: #fff !important; }
+  }
+  .chapter-prose h2 { color: #444 !important; border-left-color: #999 !important; }
+  .chapter-prose h3 { color: #555 !important; }
+
+  // Boxes: remove tinted backgrounds, keep left border
+  .box { background: #fff !important; }
+
+  // Sensible page breaks
+  h1, h2, h3 { page-break-after: avoid; break-after: avoid; }
+  .box, .spoiler { page-break-inside: avoid; break-inside: avoid; }
 }

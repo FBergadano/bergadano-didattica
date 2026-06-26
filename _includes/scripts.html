@@ -1,4 +1,37 @@
 <script>
+// ── PDF export with QR codes for videos ───────────────────────
+function exportPDF() {
+  var wraps = document.querySelectorAll('.video-wrap');
+  var inserted = [];
+
+  wraps.forEach(function(wrap) {
+    var iframe = wrap.querySelector('iframe');
+    if (!iframe) return;
+    var m = iframe.src.match(/\/embed\/([^?&]+)/);
+    if (!m) return;
+    var vid = m[1];
+    var ytUrl = 'https://www.youtube.com/watch?v=' + vid;
+    var qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(ytUrl);
+    var cap = iframe.title || '';
+
+    var div = document.createElement('div');
+    div.className = 'video-qr-print';
+    div.innerHTML =
+      '<img src="' + qrUrl + '" width="200" height="200" alt="QR code video">' +
+      (cap ? '<p class="video-caption">' + cap + '</p>' : '') +
+      '<p class="video-qr-url">' + ytUrl + '</p>';
+    wrap.parentNode.insertBefore(div, wrap.nextSibling);
+    inserted.push(div);
+  });
+
+  window.addEventListener('afterprint', function cleanup() {
+    inserted.forEach(function(d) { d.remove(); });
+    window.removeEventListener('afterprint', cleanup);
+  });
+
+  window.print();
+}
+
 // ── Font accessibility toggle ──────────────────────────────────
 function toggleFont() {
   const body = document.body;
@@ -16,13 +49,13 @@ function toggleFont() {
   }
 })();
 
-// ── Sidebar active section tracking ───────────────────────────
+// ── Sidebar active section tracking (multi-chapter pages) ─────
 (function() {
   const sections = document.querySelectorAll('.chapter-section');
   const links    = document.querySelectorAll('.sidebar-nav a');
   if (!sections.length) return;
   window.addEventListener('scroll', function() {
-    let cur = '';
+    var cur = '';
     sections.forEach(function(s) {
       if (window.scrollY >= s.offsetTop - 90) cur = s.id;
     });
@@ -30,5 +63,32 @@ function toggleFont() {
       a.classList.toggle('active', a.getAttribute('href') === '#' + cur);
     });
   });
+})();
+
+// ── Chapter TOC builder ────────────────────────────────────────
+(function() {
+  var toc   = document.getElementById('chapter-toc');
+  var prose = document.querySelector('.chapter-prose');
+  if (!toc || !prose) return;
+  var headings = prose.querySelectorAll('h3, h4, h5');
+  if (!headings.length) return;
+  var ul = document.createElement('ul');
+  headings.forEach(function(h) {
+    if (!h.id) {
+      h.id = h.textContent.trim()
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/\s+/g, '-');
+    }
+    var li = document.createElement('li');
+    if (h.tagName === 'H4') li.classList.add('toc-sub');
+    if (h.tagName === 'H5') li.classList.add('toc-subsub');
+    var a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.textContent = h.textContent;
+    li.appendChild(a);
+    ul.appendChild(li);
+  });
+  toc.appendChild(ul);
 })();
 </script>

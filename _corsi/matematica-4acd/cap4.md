@@ -1,0 +1,11 @@
+---
+layout: capitolo
+title: "Capitolo 4"
+corso: matematica-4acd
+corso_titolo: "Matematica 4ª ACD"
+materia: matematica
+classe: "4ACD"
+numero: 4
+---
+
+*Contenuto in preparazione.*

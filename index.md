@@ -8,7 +8,7 @@ title: "Bergadano Didattica — Liceo Vittoria"
   <h1 class="hero-title">Matematica e Fisica,<br><em>spiegati insieme</em></h1>
   <p class="hero-subtitle">
     Materiale didattico interattivo per i corsi del Prof. Fulvio Bergadano.
-    Qui trovi appunti, simulazioni, esercizi e compiti per ogni classe.
+    Scegli la tua classe per accedere agli appunti, simulazioni ed esercizi.
   </p>
   <div class="hero-formula" aria-label="Alcune formule dei corsi">
     \( i\hbar\,\frac{\partial}{\partial t}\Psi = \hat{H}\Psi \)
@@ -20,84 +20,23 @@ title: "Bergadano Didattica — Liceo Vittoria"
 </header>
 
 <main class="courses-section">
-
   <div class="courses-group">
-    <p class="section-label" style="font-family:var(--font-accessible,Arial);font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:#718096;margin-bottom:.4rem;">Matematica</p>
-    <h2 class="courses-group-title">Corsi di Matematica</h2>
-    <div class="courses-grid">
-      <a href="{{ '/corsi/matematica-3acd/' | relative_url }}" class="course-card math">
-        <p class="card-tag">Matematica · 3° anno</p>
-        <p class="card-name">Matematica 3ª ACD</p>
-        <p class="card-class">Classe 3ACD · Liceo Vittoria</p>
-        <p class="card-chapters">6 capitoli · simulazioni · esercizi</p>
+    <h2 class="courses-group-title">Scegli la tua classe</h2>
+    <div class="classi-grid">
+      {% for classe in site.data.classi %}
+      <a href="{{ '/classi/' | append: classe.id | append: '/' | relative_url }}" class="classe-card">
+        <p class="classe-card-label">Anno {{ classe.anno }}</p>
+        <p class="classe-card-nome">{{ classe.nome }}</p>
+        <ul class="classe-card-corsi">
+          {% for corso in classe.corsi %}
+          <li class="materia-{{ corso.materia }}">{{ corso.nome }}</li>
+          {% endfor %}
+        </ul>
         <span class="card-arrow" aria-hidden="true">→</span>
       </a>
-      <a href="{{ '/corsi/matematica-4acd/' | relative_url }}" class="course-card math">
-        <p class="card-tag">Matematica · 4° anno</p>
-        <p class="card-name">Matematica 4ª ACD</p>
-        <p class="card-class">Classe 4ACD · Liceo Vittoria</p>
-        <p class="card-chapters">6 capitoli · simulazioni · esercizi</p>
-        <span class="card-arrow" aria-hidden="true">→</span>
-      </a>
+      {% endfor %}
     </div>
   </div>
-
-  <div class="courses-group">
-    <p class="section-label" style="font-family:var(--font-accessible,Arial);font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:#718096;margin-bottom:.4rem;">Fisica</p>
-    <h2 class="courses-group-title">Corsi di Fisica</h2>
-    <div class="courses-grid">
-      <a href="{{ '/corsi/fisica-3b/' | relative_url }}" class="course-card phys">
-        <p class="card-tag">Fisica · 3° anno</p>
-        <p class="card-name">Fisica 3ª B</p>
-        <p class="card-class">Classe 3B · Liceo Vittoria</p>
-        <p class="card-chapters">6 capitoli · simulazioni · esercizi</p>
-        <span class="card-arrow" aria-hidden="true">→</span>
-      </a>
-      <a href="{{ '/corsi/fisica-3acd/' | relative_url }}" class="course-card phys">
-        <p class="card-tag">Fisica · 3° anno · ACD</p>
-        <p class="card-name">Fisica 3ª ACD</p>
-        <p class="card-class">Progetto sperimentale (4 anni)</p>
-        <p class="card-chapters">6 capitoli · simulazioni · esercizi</p>
-        <span class="card-arrow" aria-hidden="true">→</span>
-      </a>
-      <a href="{{ '/corsi/fisica-4b/' | relative_url }}" class="course-card phys">
-        <p class="card-tag">Fisica · 4° anno</p>
-        <p class="card-name">Fisica 4ª B</p>
-        <p class="card-class">Classe 4B · Liceo Vittoria</p>
-        <p class="card-chapters">6 capitoli · simulazioni · esercizi</p>
-        <span class="card-arrow" aria-hidden="true">→</span>
-      </a>
-      <a href="{{ '/corsi/fisica-4acd/' | relative_url }}" class="course-card phys">
-        <p class="card-tag">Fisica · 4° anno · ACD</p>
-        <p class="card-name">Fisica 4ª ACD</p>
-        <p class="card-class">Progetto sperimentale (4 anni)</p>
-        <p class="card-chapters">6 capitoli · simulazioni · esercizi</p>
-        <span class="card-arrow" aria-hidden="true">→</span>
-      </a>
-      <a href="{{ '/corsi/fisica-5acd/' | relative_url }}" class="course-card phys">
-        <p class="card-tag">Fisica · 5° anno</p>
-        <p class="card-name">Fisica 5ª ACD</p>
-        <p class="card-class">Classe 5ACD · Liceo Vittoria</p>
-        <p class="card-chapters">6 capitoli · simulazioni · esercizi</p>
-        <span class="card-arrow" aria-hidden="true">→</span>
-      </a>
-    </div>
-  </div>
-
-  <div class="courses-group">
-    <p class="section-label" style="font-family:var(--font-accessible,Arial);font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:#718096;margin-bottom:.4rem;">Prospettive globali</p>
-    <h2 class="courses-group-title">Cittadinanza e Prospettive Globali</h2>
-    <div class="courses-grid">
-      <a href="{{ '/corsi/cittadinanza/' | relative_url }}" class="course-card citt">
-        <p class="card-tag">Trasversale · tutte le classi</p>
-        <p class="card-name">Cittadinanza e Prospettive Globali</p>
-        <p class="card-class">Liceo Vittoria</p>
-        <p class="card-chapters">Scienza e società · Etica e tecnologia</p>
-        <span class="card-arrow" aria-hidden="true">→</span>
-      </a>
-    </div>
-  </div>
-
 </main>
 
 <section class="info-strip">
@@ -112,7 +51,7 @@ title: "Bergadano Didattica — Liceo Vittoria"
     </div>
     <div class="info-item">
       <p class="info-item-label">Materie</p>
-      <p class="info-item-value">Matematica · Fisica</p>
+      <p class="info-item-value">Matematica · Fisica · Cittadinanza</p>
     </div>
     <div class="info-item">
       <p class="info-item-label">Anno scolastico</p>

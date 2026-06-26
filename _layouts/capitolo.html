@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ page.title }} — {{ page.corso_titolo }} — {{ site.title }}</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IM+Fell+English:ital@0;1&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+
+<style>
+  :root {
+    {% if page.materia == "matematica" %}
+    --accent:        #0891b2;
+    --accent-light:  #e0f2fe;
+    --accent-border: #7dd3fc;
+    {% elsif page.materia == "cittadinanza" %}
+    --accent:        #7c3aed;
+    --accent-light:  #faf5ff;
+    --accent-border: #d8b4fe;
+    {% else %}
+    --accent:        #0f766e;
+    --accent-light:  #f0fdf4;
+    --accent-border: #86efac;
+    {% endif %}
+  }
+</style>
+
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      tags: 'ams'
+    },
+    options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+{% seo %}
+</head>
+<body>
+
+{% include topbar.html %}
+
+<div class="page-layout">
+
+  <!-- Sidebar con elenco capitoli del corso -->
+  <aside class="sidebar" aria-label="Capitoli del corso">
+    {% assign corso_url = '/corsi/' | append: page.corso | append: '/' %}
+    <a href="{{ corso_url | relative_url }}" class="sidebar-course-name">{{ page.corso_titolo }}</a>
+    <p class="sidebar-course-class">{{ page.classe }} · Liceo Vittoria</p>
+    <nav>
+      <ul class="sidebar-nav">
+        {% assign tutti_capitoli = site.corsi | where: "corso", page.corso | sort: "numero" %}
+        {% for cap in tutti_capitoli %}
+        <li>
+          <a href="{{ cap.url | relative_url }}"{% if cap.numero == page.numero %} class="active"{% endif %}>
+            <span class="chapter-num">Capitolo {{ cap.numero }}</span>
+            {{ cap.title }}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Contenuto principale -->
+  <main class="main-content" id="main">
+
+    <header class="chapter-header">
+      <span class="chapter-number">Capitolo {{ page.numero }}</span>
+      <h1 class="chapter-title">{{ page.title }}</h1>
+    </header>
+
+    <div class="chapter-prose">
+      {{ content }}
+    </div>
+
+    <!-- Navigazione prev/next -->
+    {% assign tutti_capitoli = site.corsi | where: "corso", page.corso | sort: "numero" %}
+    {% assign prev_num = page.numero | minus: 1 %}
+    {% assign next_num = page.numero | plus: 1 %}
+    {% assign prev_cap = tutti_capitoli | where: "numero", prev_num | first %}
+    {% assign next_cap = tutti_capitoli | where: "numero", next_num | first %}
+
+    <nav class="chapter-nav">
+      {% if prev_cap %}
+      <a href="{{ prev_cap.url | relative_url }}" class="chapter-nav-prev">
+        Capitolo {{ prev_cap.numero }} — {{ prev_cap.title }}
+      </a>
+      {% else %}<span></span>{% endif %}
+      {% if next_cap %}
+      <a href="{{ next_cap.url | relative_url }}" class="chapter-nav-next">
+        Capitolo {{ next_cap.numero }} — {{ next_cap.title }}
+      </a>
+      {% endif %}
+    </nav>
+
+  </main>
+
+</div>
+
+{% include footer.html %}
+{% include scripts.html %}
+
+</body>
+</html>

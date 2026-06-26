@@ -29,6 +29,10 @@ defaults:
       type: "corsi"
     values:
       layout: "corso"
+  - scope:
+      path: "classi"
+    values:
+      permalink: /classi/:basename/
 
 # Plugins (GitHub Pages li supporta tutti)
 plugins:
@@ -91,6 +95,7 @@ exclude:
   - HOWTO.md
   - PROGETTO.md
   - STILE.md
+  - CLAUDE.md
   - Gemfile
   - Gemfile.lock
   - README.md

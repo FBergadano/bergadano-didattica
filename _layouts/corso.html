@@ -57,11 +57,12 @@
     <p class="sidebar-course-class">{{ page.classe }} · Liceo Vittoria</p>
     <nav>
       <ul class="sidebar-nav">
-        {% for cap in page.capitoli_lista %}
+        {% assign capitoli = site.corsi | where: "corso", page.slug | sort: "numero" %}
+        {% for cap in capitoli %}
         <li>
-          <a href="#cap{{ cap.numero }}">
+          <a href="{{ cap.url | relative_url }}">
             <span class="chapter-num">Capitolo {{ cap.numero }}</span>
-            {{ cap.titolo }}
+            {{ cap.title }}
           </a>
         </li>
         {% endfor %}
@@ -72,6 +73,19 @@
   <!-- Contenuto principale -->
   <main class="main-content" id="main">
     {{ content }}
+
+    <!-- Griglia capitoli (auto-generata dalla collezione) -->
+    {% assign capitoli = site.corsi | where: "corso", page.slug | sort: "numero" %}
+    {% if capitoli.size > 0 %}
+    <div class="chapter-grid">
+      {% for cap in capitoli %}
+      <a href="{{ cap.url | relative_url }}" class="chapter-card">
+        <span class="chapter-card-num">Capitolo {{ cap.numero }}</span>
+        <span class="chapter-card-title">{{ cap.title }}</span>
+      </a>
+      {% endfor %}
+    </div>
+    {% endif %}
   </main>
 
 </div>

@@ -5,7 +5,22 @@
     <span class="breadcrumb">
       <a href="{{ '/' | relative_url }}">Home</a> › <span>{{ page.title }}</span>
     </span>
+    {% elsif page.layout == "capitolo" %}
+    {% assign corso_url = '/corsi/' | append: page.corso | append: '/' %}
+    <span class="breadcrumb">
+      <a href="{{ '/' | relative_url }}">Home</a> ›
+      <a href="{{ corso_url | relative_url }}">{{ page.corso_titolo }}</a> ›
+      Cap.&thinsp;{{ page.numero }}
+    </span>
+    {% elsif page.layout == "classe" %}
+    <span class="breadcrumb">
+      <a href="{{ '/' | relative_url }}">Home</a> › <span>{{ page.title }}</span>
+    </span>
     {% endif %}
+    <button id="pdf-btn" onclick="exportPDF()"
+            title="Scarica questa pagina come PDF (i video diventano QR code)">
+      ⬇ Esporta come PDF
+    </button>
     <button id="font-toggle" onclick="toggleFont()" aria-pressed="false"
             title="Attiva font ad alta leggibilità (Atkinson Hyperlegible)">
       Aa&thinsp; leggibilità
